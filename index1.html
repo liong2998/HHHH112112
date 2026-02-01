@@ -3,169 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>현대/제네시스 김정민 카마스터</title>
+    <title>현대자동차 김정민</title>
     <style>
-        :root { --hyundai-blue: #002c5f; --genesis-gold: #d1b695; --genesis-black: #111; }
-        body { margin: 0; font-family: 'Pretendard', sans-serif; background: #f8f9fa; color: #333; }
-        .header { background: #fff; padding: 15px; text-align: center; font-weight: bold; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; }
+        :root { --hyundai-blue: #002c5f; --price-red: #e44d26; --catalog-gold: #8e734a; }
+        body { margin: 0; font-family: 'Malgun Gothic', sans-serif; background: #f0f2f5; color: #333; -webkit-tap-highlight-color: transparent; }
+        .header { background: var(--hyundai-blue); color: white; padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
         
-        /* 명함 섹션 스타일 */
-        .biz-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .biz-card h2 { margin: 0; color: var(--hyundai-blue); font-size: 1.2rem; }
-        .biz-card p { margin: 5px 0; font-size: 0.9rem; color: #666; }
-
-        .brand-card { width: 100%; height: 100px; border-radius: 12px; margin-bottom: 15px; border: none; font-size: 1.5rem; font-weight: 800; cursor: pointer; color: white; transition: 0.3s; }
-        .brand-card.genesis { background: var(--genesis-black); color: var(--genesis-gold); border: 1px solid var(--genesis-gold); }
-        .brand-card.hyundai { background: var(--hyundai-blue); }
+        .biz-card { background: white; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; text-align: center; }
+        .biz-card .name { font-size: 1.4rem; font-weight: bold; color: var(--hyundai-blue); margin-bottom: 5px; }
+        .contact-row { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-c { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; color: white; cursor: pointer; text-decoration: none; font-size: 0.9rem; text-align: center; }
 
         .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .car-item { background: #fff; padding: 20px 10px; text-align: center; border-radius: 8px; border: 1px solid #eee; font-weight: bold; cursor: pointer; }
+        .car-item { background: white; padding: 25px 10px; text-align: center; border-radius: 10px; border: 1px solid #eee; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
-        .info-box { background: #f1f3f5; padding: 15px; border-radius: 8px; margin-bottom: 12px; }
-        .info-title { font-weight: bold; color: var(--hyundai-blue); margin-bottom: 8px; display: block; }
-        .spec-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .spec-table td { padding: 6px 0; border-bottom: 1px solid #dee2e6; }
-
-        .btn-full { display: block; width: 100%; padding: 12px; margin-top: 10px; text-align: center; border-radius: 6px; font-weight: bold; text-decoration: none; cursor: pointer; }
-        .btn-price { background: #e44d26; color: white; border: none; }
-        .btn-call { background: #28a745; color: white; border: none; }
+        #detail-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #f0f2f5; z-index: 2000; overflow-y: auto; display: none; }
+        .info-box { background: white; padding: 18px; border-radius: 12px; margin-bottom: 12px; border: 1px solid #eee; }
+        .info-title { font-weight: bold; color: var(--hyundai-blue); margin-bottom: 10px; display: block; border-left: 4px solid var(--hyundai-blue); padding-left: 10px; }
+        .spec-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f1f1; font-size: 0.9rem; }
         
-        .sticky-footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 10px; background: #fff; display: flex; gap: 8px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .hidden { display: none; }
+        .footer-fixed { position: fixed; bottom: 0; left: 0; width: 100%; padding: 12px; background: white; display: flex; gap: 8px; box-sizing: border-box; border-top: 1px solid #eee; }
+        .btn-f { flex: 1; padding: 15px; border-radius: 10px; border: none; font-weight: bold; font-size: 0.95rem; cursor: pointer; color: white; text-align: center; text-decoration: none; }
+        
+        /* 자료 보기 전용 버튼 */
+        .btn-doc { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; color: white; margin-top: 8px; cursor: pointer; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div id="screen-main">
+<div id="main-screen">
     <div class="header">현대자동차 신대방대리점</div>
     <div class="container">
         <div class="biz-card">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                    <p style="margin:0; font-weight:bold;">카마스터</p>
-                    <h2 style="font-size:1.5rem;">김 정 민</h2>
-                </div>
-                <p style="text-align:right; font-size:0.8rem; color:var(--hyundai-blue);">신대방대리점<br>010. 9102. 6388</p>
+            <div class="name">김 정 민 카마스터</div>
+            <p style="margin:5px 0; font-size:0.85rem; color:#666;">상담문의 | 010-9102-6388</p>
+            <div class="contact-row">
+                <a href="tel:01091026388" class="btn-c" style="background:#28a745;">전화 상담</a>
+                <a href="sms:01091026388" class="btn-c" style="background:#007bff;">문자 문의</a>
             </div>
-            <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
-            <p>📍 서울시 영등포구 신풍로22길 7, 1층</p>
-            <p>📧 liong29@naver.com</p>
-            <p style="font-weight:bold; color:#e44d26;">캐시백 / 할부 / 리스 / 렌트 상담 전문</p>
         </div>
-
-        <button class="brand-card genesis" onclick="showList('genesis')">GENESIS</button>
-        <button class="brand-card hyundai" onclick="showList('hyundai')">HYUNDAI</button>
+        <div class="car-grid" id="car-grid"></div>
     </div>
 </div>
 
-<div id="screen-list" class="hidden">
-    <div class="header" id="list-title">라인업</div>
-    <div class="container">
-        <button onclick="goHome()" style="border:none; background:none; color:#666; margin-bottom:15px;">← 브랜드 선택</button>
-        <div class="car-grid" id="car-list"></div>
-    </div>
-</div>
-
-<div id="screen-detail" class="hidden">
-    <div class="header" id="detail-title">상세정보</div>
-    <div class="container" style="padding-bottom: 80px;">
-        <button onclick="backToList()" style="border:none; background:none; color:#666; margin-bottom:15px;">← 목록으로</button>
+<div id="detail-screen">
+    <div class="header" id="detail-header">차종 정보</div>
+    <div class="container" style="padding-bottom: 120px;">
+        <button onclick="closeDetail()" style="background:none; border:none; color:#666; font-weight:bold; margin-bottom:15px; cursor:pointer;">← 목록으로</button>
         
         <div class="info-box">
-            <span class="info-title">📋 주요 제원/연비</span>
-            <table class="spec-table" id="spec-data"></table>
+            <span class="info-title">주요 제원 및 연비</span>
+            <div id="spec-data"></div>
         </div>
 
         <div class="info-box">
-            <span class="info-title">💰 판매 가격 및 옵션</span>
-            <p id="price-summary" style="margin:5px 0; font-weight:bold;"></p>
-            <button id="price-pdf-btn" class="btn-full btn-price" onclick="">📄 전체 가격표(PDF) 보기</button>
+            <span class="info-title">판매 가격 및 공식 자료</span>
+            <p id="price-data" style="font-size: 1.1rem; font-weight: bold; color: var(--price-red); margin: 5px 0;"></p>
+            <button class="btn-doc" style="background:var(--price-red);" onclick="openDoc('price')">📄 공식 가격표 보기 (PDF)</button>
+            <button class="btn-doc" style="background:var(--catalog-gold);" onclick="openDoc('catalog')">📕 공식 카탈로그 보기 (PDF)</button>
         </div>
 
         <div class="info-box">
-            <span class="info-title">🎨 컬러 정보</span>
-            <p id="color-data" style="font-size:0.9rem;"></p>
+            <span class="info-title">컬러 (외장/내장)</span>
+            <p id="color-data" style="font-size:0.9rem; margin:0; line-height:1.4;"></p>
         </div>
     </div>
-    
-    <div class="sticky-footer">
-        <button class="btn-full btn-call" onclick="location.href='tel:01091026388'">📞 상담 연결</button>
-        <button class="btn-full btn-price" style="background:#333;" onclick="openQuote()">견적내기</button>
+    <div class="footer-fixed">
+        <button class="btn-f" style="background:#333;" onclick="window.open('https://www.hyundai.com/kr/ko/e/vehicles/estimation')">내차 만들기</button>
+        <button class="btn-f" style="background:var(--hyundai-blue);" onclick="location.href='tel:01091026388'">상담 전화</button>
     </div>
 </div>
 
 <script>
-    const carData = {
+    const hyundaiCars = {
         "그랜저": {
-            spec: {"전장": "5,035mm", "연비": "11.2~18.0km/ℓ", "배기량": "2,497~3,470cc"},
-            price: "3,768만 원 ~ 5,315만 원",
-            colors: "어비스 블랙 펄, 세레니티 화이트 펄, 녹턴 그레이 등",
-            pdf: "https://www.hyundai.com/contents/repn-car/catalog/grandeur-price.pdf"
+            price: "3,768만 ~ 5,315만",
+            spec: {"전장": "5,035mm", "전폭": "1,880mm", "전고": "1,460mm", "연비": "11.2~18.0km/ℓ"},
+            colors: "어비스 블랙 펄, 세레니티 화이트 펄, 녹턴 그레이, 유기 브론즈, 밤부 차콜 그린 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/grandeur-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/grandeur-catalog.pdf"
+        },
+        "쏘나타": {
+            price: "2,831만 ~ 3,931만",
+            spec: {"전장": "4,910mm", "전폭": "1,860mm", "전고": "1,445mm", "연비": "9.4~13.5km/ℓ"},
+            colors: "어비스 블랙 펄, 세레니티 화이트 펄, 트랜스미션 블루, 에어로 실버 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/sonata-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/sonata-catalog.pdf"
+        },
+        "아반떼": {
+            price: "1,994만 ~ 2,822만",
+            spec: {"전장": "4,710mm", "전폭": "1,825mm", "전고": "1,420mm", "연비": "14.3~15.3km/ℓ"},
+            colors: "아틀라스 화이트, 사이버 그레이 메탈릭, 플루이드 메탈, 인텐스 블루 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/avante-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/avante-catalog.pdf"
         },
         "싼타페": {
-            spec: {"전장": "4,830mm", "연비": "9.7~15.5km/ℓ", "출력": "235~281hp"},
-            price: "3,546만 원 ~ 5,042만 원",
-            colors: "어비스 블랙 펄, 크리미 화이트, 얼루어링 실버 등",
-            pdf: "https://www.hyundai.com/contents/repn-car/catalog/santafe-price.pdf"
+            price: "3,546만 ~ 5,042만",
+            spec: {"전장": "4,830mm", "전폭": "1,900mm", "전고": "1,720mm", "연비": "9.7~15.5km/ℓ"},
+            colors: "크리미 화이트 펄, 얼루어링 실버, 어비스 블랙 펄, 테라코타 오렌지 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/santafe-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/santafe-catalog.pdf"
         },
-        "G80": {
-            spec: {"전장": "5,005mm", "연비": "8.2~10.6km/ℓ", "구동": "2WD/AWD"},
-            price: "5,890만 원 ~ 9,100만 원",
-            colors: "우유니 화이트, 비크 블랙, 세빌 실버 등",
-            pdf: "https://www.genesis.com/content/dam/genesis-p2/kr/assets/models/g80/pdf/genesis-g80-price-list.pdf"
+        "투싼": {
+            price: "2,771만 ~ 3,938만",
+            spec: {"전장": "4,640mm", "전폭": "1,865mm", "전고": "1,665mm", "연비": "11.0~14.3km/ℓ"},
+            colors: "아마존 그레이 메탈릭, 팬텀 블랙 펄, 티탄 그레이 메탈릭, 오션 인디고 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/tucson-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/tucson-catalog.pdf"
+        },
+        "코나": {
+            price: "2,446만 ~ 3,422만",
+            spec: {"전장": "4,350mm", "전폭": "1,825mm", "전고": "1,580mm", "연비": "10.3~13.6km/ℓ"},
+            colors: "네오테릭 옐로우, 어비스 블랙 펄, 아틀라스 화이트, 에코트로닉 그레이 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/kona-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/kona-catalog.pdf"
+        },
+        "베뉴": {
+            price: "2,146만 ~ 2,413만",
+            spec: {"전장": "4,040mm", "전폭": "1,770mm", "전고": "1,585mm", "연비": "13.3~13.7km/ℓ"},
+            colors: "아틀라스 화이트, 사이버 그레이 메탈릭, 이그조틱 그레이, 메탈릭 실버 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/venue-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/venue-catalog.pdf"
+        },
+        "팰리세이드": {
+            price: "3,896만 ~ 5,491만",
+            spec: {"전장": "4,995mm", "전폭": "1,975mm", "전고": "1,750mm", "연비": "8.5~12.4km/ℓ"},
+            colors: "로버스트 에메랄드 펄, 가이아 그레이 메탈릭, 어비스 블랙 펄, 크리미 화이트 등",
+            priceUrl: "https://www.hyundai.com/contents/repn-car/catalog/palisade-price.pdf",
+            catalogUrl: "https://www.hyundai.com/contents/repn-car/catalog/palisade-catalog.pdf"
         }
-        // 다른 차종들도 위와 같은 형식으로 추가 가능
     };
 
-    const config = {
-        genesis: { cars: ["G70", "G80", "G90", "GV70", "GV80"], quoteUrl: "https://www.genesis.com/kr/ko/shopping/quote.html" },
-        hyundai: { cars: ["아반떼", "쏘나타", "그랜저", "베뉴", "코나", "투싼", "싼타페", "팰리세이드", "포터", "스타리아"], quoteUrl: "https://www.hyundai.com/kr/ko/e/vehicles/estimation" }
-    };
+    const grid = document.getElementById('car-grid');
+    Object.keys(hyundaiCars).forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'car-item';
+        div.innerText = name;
+        div.onclick = () => openDetail(name);
+        grid.appendChild(div);
+    });
 
-    let currentBrand = '';
+    let currentCar = "";
 
-    function showList(brand) {
-        currentBrand = brand;
-        document.getElementById('screen-main').classList.add('hidden');
-        document.getElementById('screen-list').classList.remove('hidden');
-        document.getElementById('list-title').innerText = brand.toUpperCase() + " 라인업";
+    function openDetail(name) {
+        currentCar = name;
+        const data = hyundaiCars[name];
+        document.getElementById('detail-header').innerText = name + " 상세정보";
+        document.getElementById('price-data').innerText = "기본 판매가: " + data.price;
+        document.getElementById('color-data').innerText = data.colors;
         
-        const listDiv = document.getElementById('car-list');
-        listDiv.innerHTML = '';
-        config[brand].cars.forEach(car => {
-            const btn = document.createElement('div');
-            btn.className = 'car-item';
-            btn.innerText = car;
-            btn.onclick = () => showDetail(car);
-            listDiv.appendChild(btn);
-        });
-    }
-
-    function showDetail(carName) {
-        document.getElementById('screen-list').classList.add('hidden');
-        document.getElementById('screen-detail').classList.remove('hidden');
-        document.getElementById('detail-title').innerText = carName;
-
-        const info = carData[carName] || { spec: {"안내": "상세 데이터 업데이트 중"}, price: "상담 시 안내", colors: "홈페이지 참고", pdf: "#" };
-        
-        const specTable = document.getElementById('spec-data');
-        specTable.innerHTML = '';
-        for (let key in info.spec) {
-            specTable.innerHTML += `<tr><td style="color:#888; width:40%">${key}</td><td>${info.spec[key]}</td></tr>`;
+        const specDiv = document.getElementById('spec-data');
+        specDiv.innerHTML = "";
+        for(let key in data.spec) {
+            specDiv.innerHTML += `<div class="spec-row"><span>${key}</span><span style="font-weight:bold;">${data.spec[key]}</span></div>`;
         }
-
-        document.getElementById('price-summary').innerText = "기본가: " + info.price;
-        document.getElementById('color-data').innerText = info.colors;
         
-        const pdfBtn = document.getElementById('price-pdf-btn');
-        pdfBtn.onclick = () => window.open(info.pdf || 'https://www.hyundai.com/kr/ko/e/search?searchKeyword=' + carName, '_blank');
+        document.getElementById('detail-screen').style.display = "block";
     }
 
-    function goHome() { document.getElementById('screen-main').classList.remove('hidden'); document.getElementById('screen-list').classList.add('hidden'); }
-    function backToList() { document.getElementById('screen-detail').classList.add('hidden'); document.getElementById('screen-list').classList.remove('hidden'); }
-    function openQuote() { window.open(config[currentBrand].quoteUrl, '_blank'); }
+    function closeDetail() {
+        document.getElementById('detail-screen').style.display = "none";
+    }
+
+    function openDoc(type) {
+        const url = type === 'price' ? hyundaiCars[currentCar].priceUrl : hyundaiCars[currentCar].catalogUrl;
+        window.open(url, '_blank');
+    }
 </script>
-
 </body>
 </html>
