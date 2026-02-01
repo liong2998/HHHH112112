@@ -2,104 +2,115 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>현대/제네시스 영업지원</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>현대/제네시스 카탈로그</title>
     <style>
-        .brand-genesis { background-color: #212121; color: #d1b695; }
-        .brand-hyundai { background-color: #002c5f; color: white; }
-        .card { border-radius: 12px; transition: transform 0.2s; }
-        .card:active { transform: scale(0.95); }
+        body { margin: 0; font-family: 'Malgun Gothic', sans-serif; bg-color: #f4f4f4; line-height: 1.6; }
+        .header { background: #fff; padding: 20px; text-align: center; border-bottom: 1px solid #ddd; font-weight: bold; font-size: 1.2rem; }
+        .container { padding: 15px; }
+        
+        /* 브랜드 선택 버튼 */
+        .brand-btn { width: 100%; height: 120px; border-radius: 10px; margin-bottom: 15px; border: none; font-size: 1.5rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
+        .genesis { background: #212121; color: #d1b695; }
+        .hyundai { background: #002c5f; }
+        
+        /* 차종 리스트 */
+        .car-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .car-item { background: #fff; padding: 20px; text-align: center; border-radius: 8px; border: 1px solid #ddd; font-weight: bold; cursor: pointer; }
+        
+        /* 하단 고정 버튼 */
+        .footer-btns { margin-top: 20px; }
+        .action-btn { width: 100%; padding: 15px; border-radius: 8px; border: none; font-weight: bold; margin-bottom: 10px; font-size: 1rem; cursor: pointer; }
+        .btn-blue { background: #007bff; color: white; }
+        .btn-green { background: #28a745; color: white; }
+        .btn-dark { background: #333; color: white; }
+        
+        .hidden { display: none; }
+        .back-btn { background: none; border: none; color: #007bff; font-weight: bold; padding: 10px 0; cursor: pointer; }
     </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
 
-    <div id="main-screen" class="p-6 space-y-6">
-        <h1 class="text-2xl font-bold text-center my-8 text-gray-800">영업 지원 카탈로그</h1>
+<div id="main-screen">
+    <div class="header">현대/제네시스 영업지원</div>
+    <div class="container">
+        <button class="brand-btn genesis" onclick="showBrand('genesis')">GENESIS</button>
+        <button class="brand-btn hyundai" onclick="showBrand('hyundai')">HYUNDAI</button>
         
-        <div onclick="showBrand('genesis')" class="brand-genesis p-10 card text-center text-2xl font-black shadow-xl cursor-pointer">
-            GENESIS
-        </div>
-        
-        <div onclick="showBrand('hyundai')" class="brand-hyundai p-10 card text-center text-2xl font-black shadow-xl cursor-pointer">
-            HYUNDAI
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-blue-500">
-            <p class="font-bold text-lg mb-2">내 명함 공유하기</p>
-            <button onclick="shareContact()" class="w-full bg-green-500 text-white py-3 rounded-lg font-bold">카카오톡/문자 공유</button>
+        <div class="footer-btns">
+            <button class="action-btn btn-green" onclick="shareCard()">내 명함 고객에게 공유</button>
         </div>
     </div>
+</div>
 
-    <div id="list-screen" class="hidden p-4">
-        <button onclick="goBack()" class="mb-4 text-blue-600 font-bold">← 뒤로가기</button>
-        <h2 id="brand-title" class="text-xl font-bold mb-4 text-center"></h2>
-        <div id="car-list" class="grid grid-cols-2 gap-4">
-            </div>
+<div id="list-screen" class="hidden">
+    <div class="header" id="brand-name">차종 선택</div>
+    <div class="container">
+        <button class="back-btn" onclick="goHome()">← 브랜드 선택으로 이동</button>
+        <div class="car-grid" id="car-list"></div>
         
-        <div class="mt-8 border-t pt-4">
-            <button id="estimate-link" onclick="openEstimate()" class="w-full py-4 bg-gray-800 text-white rounded-lg font-bold text-center">
-                공식 홈페이지 견적내기 ↗
-            </button>
+        <div class="footer-btns">
+            <button class="action-btn btn-dark" onclick="openBuild()">공식 홈페이지 견적내기 ↗</button>
         </div>
     </div>
+</div>
 
-    <script>
-        const data = {
-            genesis: {
-                title: "GENESIS LINEUP",
-                cars: ["G70", "G80", "G90", "GV70", "GV80"],
-                link: "https://www.genesis.com/kr/ko/view-delivery/estimate/models.html"
-            },
-            hyundai: {
-                title: "HYUNDAI LINEUP",
-                cars: ["아반떼", "쏘나타", "그랜저", "베뉴", "코나", "투싼", "싼타페", "팰리세이드", "포터", "스타리아"],
-                link: "https://www.hyundai.com/kr/ko/e/vehicles/build-your-own"
-            }
-        };
-
-        let currentBrand = '';
-
-        function showBrand(brand) {
-            currentBrand = brand;
-            document.getElementById('main-screen').classList.add('hidden');
-            document.getElementById('list-screen').classList.remove('hidden');
-            document.getElementById('brand-title').innerText = data[brand].title;
-            
-            const listDiv = document.getElementById('car-list');
-            listDiv.innerHTML = '';
-            
-            data[brand].cars.forEach(car => {
-                const btn = document.createElement('div');
-                btn.className = "bg-white p-6 text-center shadow rounded-lg font-bold border hover:bg-gray-50";
-                btn.innerText = car;
-                // 상세 페이지 연결 (현대차 공식 페이지의 검색 결과로 연결되게 설정)
-                btn.onclick = () => window.open(`https://www.hyundai.com/kr/ko/e/search?searchKeyword=${car}`);
-                listDiv.appendChild(btn);
-            });
+<script>
+    const data = {
+        genesis: {
+            name: "제네시스 라인업",
+            cars: ["G70", "G80", "G90", "GV70", "GV80"],
+            url: "https://www.genesis.com/kr/ko/view-delivery/estimate/models.html"
+        },
+        hyundai: {
+            name: "현대자동차 라인업",
+            cars: ["아반떼", "쏘나타", "그랜저", "베뉴", "코나", "투싼", "싼타페", "팰리세이드", "포터", "스타리아"],
+            url: "https://www.hyundai.com/kr/ko/e/vehicles/build-your-own"
         }
+    };
 
-        function goBack() {
-            document.getElementById('main-screen').classList.remove('hidden');
-            document.getElementById('list-screen').classList.add('hidden');
-        }
+    let selectedBrand = '';
 
-        function openEstimate() {
-            window.open(data[currentBrand].link);
-        }
+    function showBrand(brand) {
+        selectedBrand = brand;
+        document.getElementById('main-screen').className = 'hidden';
+        document.getElementById('list-screen').className = '';
+        document.getElementById('brand-name').innerText = data[brand].name;
+        
+        const listContainer = document.getElementById('car-list');
+        listContainer.innerHTML = '';
+        
+        data[brand].cars.forEach(car => {
+            const div = document.createElement('div');
+            div.className = 'car-item';
+            div.innerText = car;
+            // 각 차종별 상세 정보(가격/제원) 페이지로 이동
+            div.onclick = () => {
+                const searchUrl = `https://www.hyundai.com/kr/ko/e/search?searchKeyword=${encodeURIComponent(car)}`;
+                window.open(searchUrl, '_blank');
+            };
+            listContainer.appendChild(div);
+        });
+    }
 
-        function shareContact() {
-            // 실제 영업사원님의 정보를 아래에 기입하세요
-            const name = "홍길동 카마스터";
-            const phone = "010-1234-5678";
-            const text = `안녕하세요! 현대자동차 ${name}입니다. 상담이 필요하시면 언제든 연락주세요.\n전화: ${phone}`;
-            
-            if (navigator.share) {
-                navigator.share({ title: '명함 공유', text: text });
-            } else {
-                alert("복사되었습니다: " + text);
-            }
+    function goHome() {
+        document.getElementById('main-screen').className = '';
+        document.getElementById('list-screen').className = 'hidden';
+    }
+
+    function openBuild() {
+        window.open(data[selectedBrand].url, '_blank');
+    }
+
+    function shareCard() {
+        const myInfo = "안녕하세요! 현대자동차 카마스터입니다.\n상담이 필요하시면 언제든 연락주세요!";
+        if (navigator.share) {
+            navigator.share({ title: '현대차 상담 명함', text: myInfo });
+        } else {
+            alert("명함 정보: " + myInfo);
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
